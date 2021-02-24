@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Vertical (basic) form</h2>
+
+  <div class="form-group">
+    <label for="email">Id:</label>
+    <input type="number" class="form-control" id="user_id"  name="user_id">
+  </div>
+  <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="user_email"  name="user_email">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input type="text" class="form-control" id="user_pwd"  name="user_pwd">
+    </div>
+    <button id="insert" class="btn btn-default">add</button>
+    <button id="stud_insert" class="btn btn-default">stud add</button>
+    <button id="update" class="btn btn-default">update</button>
+    <button id="select" class="btn btn-default">select</button>
+    <button id="remove" class="btn btn-default">remove</button>
+
+  
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script> 
+
+<script id="MainScript">
+ var firebaseConfig = {
+    apiKey: "AIzaSyDmcWvgoO3XJOZ4B-qre4FflknoEMe1g88",
+    authDomain: "surajdemo-1ef62.firebaseapp.com",
+    projectId: "surajdemo-1ef62",
+    storageBucket: "surajdemo-1ef62.appspot.com",
+    messagingSenderId: "412264519554",
+    appId: "1:412264519554:web:f4ff87f44554e6b4b5619b",
+    measurementId: "G-0X89DXHLS8"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+//----------------------- Ready Data
+
+var user_email, user_pwd, user_id;
+
+function Ready(){
+
+    user_id = document.getElementById("user_id").value;
+    user_email = document.getElementById("user_email").value;
+    user_pwd = document.getElementById("user_pwd").value;
+}
+
+//---------------- isnert data
+
+document.getElementById("insert").onclick = function(){
+
+    Ready();
+
+    firebase.database().ref('employees/'+user_id).set({
+
+        User_Id: user_id,
+        User_Email: user_email,
+        User_Password: user_pwd
+
+
+    });
+}
+
+document.getElementById("stud_insert").onclick = function(){
+
+Ready();
+
+firebase.database().ref('Students/'+user_id).set({
+
+    User_Id: user_id,
+    User_Email: user_email,
+    User_Password: user_pwd
+
+
+});
+}
+
+
+//--------------selection data
+
+document.getElementById("select").onclick = function(){
+
+Ready();
+
+firebase.database().ref('students/'+user_id).on('value', function(snapshot) {
+    
+    document.getElementById("user_email").value = snapshot.val().User_Email;
+    document.getElementById("user_pwd").value = snapshot.val().User_Password;
+
+});
+
+}
+
+
+//---------------- update data
+
+document.getElementById("update").onclick = function(){
+
+Ready();
+
+firebase.database().ref('students/'+user_id).update({
+
+    User_Email: user_email,
+    User_Password: user_pwd
+
+
+});
+}
+
+//---------------- update data
+
+document.getElementById("remove").onclick = function(){
+
+Ready();
+
+firebase.database().ref('students/'+user_id).remove();
+}
+</script>
+</body>
+</html>
